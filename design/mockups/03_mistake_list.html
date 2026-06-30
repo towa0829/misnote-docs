@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>苦手問題一覧</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:     #1E293B;
+      --navy-lt:  #F1F5F9;
+      --amber:    #D97706;
+      --amber-dk: #B45309;
+      --amber-lt: #FFFBEB;
+      --amber-md: #FDE68A;
+      --red:      #B91C1C;
+      --green:    #065F46;
+      --green-lt: #ECFDF5;
+      --border:   #E2E8F0;
+      --bg:       #FAFAFA;
+      --surface:  #FFFFFF;
+      --text:     #0F172A;
+      --muted:    #64748B;
+      --sidebar-w: 240px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; font-size: 14px; }
+    *:focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .sidebar { width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; }
+    .logo { padding: 26px 24px 22px; font-family: 'Noto Serif JP', serif; font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .logo span { color: var(--amber); }
+    .nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
+    .nav-item.active { background: rgba(217,119,6,0.2); color: #fff; border-left: 3px solid var(--amber); padding-left: 11px; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-bottom { margin-top: auto; padding: 16px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .progress-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .progress-bar-wrap { background: rgba(255,255,255,0.12); border-radius: 99px; height: 5px; margin-bottom: 6px; }
+    .progress-bar-fill { background: var(--amber); border-radius: 99px; height: 5px; width: 40%; }
+    .progress-stat { font-size: 12px; color: rgba(255,255,255,0.45); }
+    .progress-stat strong { color: rgba(255,255,255,0.8); }
+
+    .main { margin-left: var(--sidebar-w); flex: 1; }
+
+    .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 36px; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 0; }
+    .header-top h1 { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.02em; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 0; margin-top: 14px; }
+    .tab {
+      padding: 10px 20px; font-size: 13px; font-weight: 500;
+      color: var(--muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+      letter-spacing: 0.02em;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab:hover { color: var(--navy); }
+    .tab.active { color: var(--navy); border-bottom-color: var(--amber); font-weight: 700; }
+    .tab-count {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      background: var(--navy-lt); color: var(--muted);
+      padding: 1px 6px; border-radius: 10px; margin-left: 6px;
+      vertical-align: middle;
+    }
+    .tab.active .tab-count { background: var(--amber-lt); color: var(--amber); }
+
+    .content { padding: 28px 36px; }
+
+    /* Table header */
+    .list-col-header {
+      display: grid;
+      grid-template-columns: 1fr 160px 100px 110px 200px;
+      padding: 0 8px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      letter-spacing: 0.07em; text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .row-item {
+      display: grid;
+      grid-template-columns: 1fr 160px 100px 110px 200px;
+      align-items: center; gap: 12px;
+      padding: 16px 8px; border-bottom: 1px solid var(--border);
+      cursor: pointer; border-radius: 6px; transition: background 0.12s;
+    }
+    .row-item:last-child { border-bottom: none; }
+    .row-item:hover { background: var(--navy-lt); }
+    .row-item.overdue { background: var(--amber-lt); }
+    .row-item.overdue:hover { background: #FFF3CC; }
+
+    .row-subject { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; flex-wrap: wrap; gap: 0; }
+    .row-subject .sep { margin: 0 5px; opacity: 0.4; }
+    .overdue-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: var(--amber); color: #fff;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.03em;
+      padding: 1px 6px; border-radius: 4px; margin-left: 8px;
+    }
+    .row-question { font-size: 14px; font-weight: 500; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row-memo { font-size: 12px; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .cell-subject { font-size: 13px; color: var(--muted); }
+    .wrong-pill {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 12px; color: var(--red); font-weight: 700;
+    }
+    .date-pill { font-size: 12px; color: var(--muted); }
+    .date-overdue { font-size: 12px; color: var(--amber); font-weight: 700; }
+    .date-none { font-size: 12px; color: #CBD5E1; }
+
+    .row-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-mastered {
+      padding: 6px 12px; border-radius: 5px;
+      border: 1px solid var(--border); background: var(--surface);
+      font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-mastered:hover { background: var(--navy-lt); border-color: #CBD5E1; color: var(--navy); }
+    .btn-review {
+      padding: 6px 14px; border-radius: 5px; border: none;
+      background: var(--amber); color: #fff;
+      font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+      font-family: 'Noto Sans JP', sans-serif;
+      transition: background 0.15s;
+    }
+    .btn-review:hover { background: var(--amber-dk); }
+
+    /* Mastered tab badge */
+    .mastered-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-lt); padding: 2px 8px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">mis<span>note</span></div>
+    <nav class="nav">
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        ホーム
+      </div>
+      <div class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        苦手問題
+      </div>
+      <div class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        科目管理
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="progress-label">克服率</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+      <div class="progress-stat"><strong>8</strong> 問克服 / 全 20 問</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="header">
+      <div class="header-top">
+        <h1>苦手問題</h1>
+      </div>
+      <div class="tabs">
+        <div class="tab active">苦手中<span class="tab-count">3</span></div>
+        <div class="tab">克服済み<span class="tab-count">8</span></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="list-col-header">
+        <div>問題</div>
+        <div>科目 / 単元</div>
+        <div>間違い</div>
+        <div>次の復習日</div>
+        <div></div>
+      </div>
+
+      <div class="row-item overdue">
+        <div>
+          <div class="row-subject">
+            理科
+            <span class="overdue-badge">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              期限超過
+            </span>
+          </div>
+          <div class="row-question">光の屈折の法則（スネルの法則）を式で書け</div>
+        </div>
+        <div class="cell-subject">理科</div>
+        <div class="wrong-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          2回
+        </div>
+        <div class="date-overdue">6月28日</div>
+        <div class="row-actions">
+          <button class="btn-mastered">克服済みにする</button>
+          <button class="btn-review">復習する</button>
+        </div>
+      </div>
+
+      <div class="row-item">
+        <div>
+          <div class="row-subject">数学 <span class="sep">›</span> 二次方程式</div>
+          <div class="row-question">次の方程式を解け：2x² − 5x + 3 = 0</div>
+          <div class="row-memo">符号を見落とした。解の公式の前に因数分解を試みること。</div>
+        </div>
+        <div class="cell-subject">数学 / 二次方程式</div>
+        <div class="wrong-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          3回
+        </div>
+        <div class="date-pill">7月3日</div>
+        <div class="row-actions">
+          <button class="btn-mastered">克服済みにする</button>
+          <button class="btn-review">復習する</button>
+        </div>
+      </div>
+
+      <div class="row-item">
+        <div>
+          <div class="row-subject">英語 <span class="sep">›</span> 文法</div>
+          <div class="row-question">現在完了形と過去形の違いを説明せよ</div>
+          <div class="row-memo">「経験・継続」は現在完了、「特定の過去」は過去形。</div>
+        </div>
+        <div class="cell-subject">英語 / 文法</div>
+        <div class="wrong-pill">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          1回
+        </div>
+        <div class="date-pill">7月5日</div>
+        <div class="row-actions">
+          <button class="btn-mastered">克服済みにする</button>
+          <button class="btn-review">復習する</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

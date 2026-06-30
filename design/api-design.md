@@ -233,11 +233,14 @@ Authorization: Bearer {CognitoのJWTトークン}
   "subject_id": "uuid",
   "unit_id": "uuid",
   "question_text": "次の方程式を解け: 2x + 3 = 7",
-  "correct_answer": "x = 2"
+  "correct_answer": "x = 2",
+  "memo": "符号のミスに注意",
+  "learning": "移項するとき符号が反転することを公式として覚える",
+  "next_review_at": "2024-01-08"
 }
 ```
 
-> `unit_id` は省略可（null 可）
+> `unit_id`・`memo`・`learning`・`next_review_at` は省略可。いずれかが指定された場合、`mistake_notes` レコードが自動で作成される（`next_review_at` 未指定時は `null`）。
 
 **レスポンス**
 ```json
@@ -247,9 +250,12 @@ Authorization: Bearer {CognitoのJWTトークン}
   "unit": { "id": "uuid", "name": "二次方程式" },
   "question_text": "次の方程式を解け: 2x + 3 = 7",
   "correct_answer": "x = 2",
-  "created_at": "2024-01-01T00:00:00"
+  "created_at": "2024-01-01T00:00:00",
+  "mistake_note_id": "uuid"
 }
 ```
+
+> `memo`・`next_review_at` を渡さなかった場合、`mistake_note_id` は `null`
 
 ---
 
@@ -323,6 +329,7 @@ status が `active` の一覧を返す。
       "correct_answer": "x = 2"
     },
     "memo": "符号のミスに注意",
+    "learning": "移項するとき符号が反転することを公式として覚える",
     "status": "active",
     "wrong_count": 3,
     "next_review_at": "2024-01-08"
@@ -348,6 +355,7 @@ status が `active` の一覧を返す。
       "correct_answer": "x = 2"
     },
     "memo": "符号のミスに注意",
+    "learning": "移項するとき符号が反転することを公式として覚える",
     "wrong_count": 3,
     "next_review_at": "2024-01-01"
   }
@@ -372,6 +380,7 @@ status が `mastered` の一覧を返す。
       "correct_answer": "x = 2"
     },
     "memo": "符号のミスに注意",
+    "learning": "移項するとき符号が反転することを公式として覚える",
     "status": "mastered",
     "wrong_count": 3,
     "next_review_at": null
@@ -388,6 +397,7 @@ status が `mastered` の一覧を返す。
 ```json
 {
   "memo": "符号のミスに注意。移項するとき符号が変わる",
+  "learning": "移項するとき符号が反転することを公式として覚える",
   "next_review_at": "2024-01-08"
 }
 ```
@@ -397,6 +407,7 @@ status が `mastered` の一覧を返す。
 {
   "id": "uuid",
   "memo": "符号のミスに注意。移項するとき符号が変わる",
+  "learning": "移項するとき符号が反転することを公式として覚える",
   "next_review_at": "2024-01-08",
   "status": "active"
 }

@@ -81,6 +81,7 @@
 | user_id | UUID | → users |
 | question_id | UUID | → questions |
 | memo | TEXT | 間違えた理由・ポイント |
+| learning | TEXT | 今回学んだこと |
 | status | ENUM | active / mastered |
 | wrong_count | INTEGER | 間違えた回数 |
 | next_review_at | DATE | ユーザーが設定する次の復習日 |
