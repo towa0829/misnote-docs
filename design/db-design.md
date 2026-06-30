@@ -56,7 +56,6 @@
 | unit_id | UUID | → units（nullable） |
 | question_text | TEXT | 問題文 |
 | correct_answer | TEXT | 正解 |
-| image_url | VARCHAR | 画像URL（S3） |
 | created_at | TIMESTAMP | 作成日時 |
 
 ---
@@ -84,7 +83,6 @@
 | memo | TEXT | 間違えた理由・ポイント |
 | status | ENUM | active / mastered |
 | wrong_count | INTEGER | 間違えた回数 |
-| correct_streak | INTEGER | 連続正解数 |
 | next_review_at | DATE | ユーザーが設定する次の復習日 |
 
 ---
@@ -110,5 +108,5 @@ users
 
 - `unit_id` はnullableにすることで、単元未分類の問題も登録できる
 - `attempts` は同じ問題を何度解いても履歴として残る
-- `mistake_notes` の `correct_streak` で連続正解数を管理し、`next_review_at` はユーザーが自分で次の復習日を設定する
+- `next_review_at` はユーザーが自分で次の復習日を設定する
 - `status` が `mastered` になった問題は復習リストから外れる
