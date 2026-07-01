@@ -11,9 +11,21 @@ This is a **design documentation repository** for "misnote" (間違いノート�
 | File | Contents |
 |------|----------|
 | `design/overview.md` | App description, feature list, tech stack, system architecture diagram, screen list |
-| `design/db-design.md` | Full schema (6 tables), ER relationships, indexes, design rationale |
-| `design/api-design.md` | REST endpoints, request/response examples, error codes, OpenAPI generator workflow |
-| `design/screen-design.md` | Screen transition diagram, per-screen layout/data/actions, API usage per screen |
+| `design/api/conventions.md` | Auth, error codes, pagination, OpenAPI Generator workflow, full endpoint list |
+| `design/api/subjects.md` | Subjects API (GET/POST/PUT/DELETE) |
+| `design/api/units.md` | Units API |
+| `design/api/questions.md` | Questions API — full CRUD, unit validation, mistake_note auto-create |
+| `design/api/attempts.md` | Attempts API — correct_streak side effects, mastery_suggested |
+| `design/api/mistake-notes.md` | Mistake-notes API — today/mastered filters, status endpoint, nested response shape |
+| `design/db/schema.md` | Full schema (6 tables) — all columns and FK relationships |
+| `design/db/design.md` | ER diagram, indexes, design rationale, correct_streak/mastery rules |
+| `design/screens/transitions.md` | Screen transition diagram |
+| `design/screens/home.md` | Home screen — today's review + unscheduled section |
+| `design/screens/register.md` | Question registration form |
+| `design/screens/review.md` | Review flow — self-grading, mastery_suggested UI, memo update |
+| `design/screens/mistake-list.md` | Mistake list — active/mastered tabs |
+| `design/screens/subjects.md` | Subject & unit management |
+| `design/screens/common-ui.md` | Color tokens, interactions, responsive breakpoints (applies to all screens) |
 | `design/mockups/` | Static HTML mockups (one per screen + `00_prototype.html` combining all screens) |
 | `ROADMAP.md` | Implementation roadmap (Phase 0–4: local Docker → backend → frontend → local JWT → AWS) |
 
