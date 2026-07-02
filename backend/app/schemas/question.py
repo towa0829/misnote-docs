@@ -10,7 +10,7 @@ class QuestionCreate(BaseModel):
     subject_id: UUID
     unit_id: UUID | None = None
     question_text: str
-    correct_answer: str
+    correct_answer: str | None = None
     memo: str | None = None
     learning: str | None = None
     next_review_at: date | None = None
@@ -20,7 +20,7 @@ class QuestionUpdate(BaseModel):
     subject_id: UUID
     unit_id: UUID | None = None
     question_text: str
-    correct_answer: str
+    correct_answer: str | None = None
 
 
 class QuestionResponse(BaseModel):
@@ -28,7 +28,7 @@ class QuestionResponse(BaseModel):
     subject: SubjectRef
     unit: UnitRef | None
     question_text: str
-    correct_answer: str
+    correct_answer: str | None = None
     created_at: datetime
     mistake_note_id: UUID | None
 

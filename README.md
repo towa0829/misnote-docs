@@ -37,6 +37,8 @@ misnote/
 
 ```bash
 cp backend/.env.example backend/.env
+docker compose up -d db
+docker compose run --rm api alembic upgrade head   # 初回のみ：テーブル作成
 docker compose up
 ```
 
